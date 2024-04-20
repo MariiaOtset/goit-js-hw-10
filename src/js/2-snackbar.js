@@ -11,23 +11,26 @@ function onSubmit(event) {
         delay: event.target.elements.delay.value,
         state: event.target.elements.state.value
     };
+    const { delay, state } = formData;
     
-    createPromise(formData)
-        .then(data => iziToast.success({ message: data, position: "topRight" }))
-        .catch(error => iziToast.error({ message: error, position: 'topRight' }));
-    form.reset();
+    createPromise(state === 'fulfilled', delay)
+        .then((delay) => {
+            iziToast.success({ message: `Fulfilled promise in ${delay}ms`, position: "topRight" });
+        })
+        .catch((delay) => {
+            iziToast.error({ message: `Rejected promise in ${delay}ms`, position: 'topRight' })
+        });
+            form.reset();
 };
 
-function createPromise({ delay, state }) {
-    const newPromise = new Promise((resolve, reject) => {
-        setTimeout(() => {
-            if (state === "fulfilled") {
-                resolve(`✅ Fulfilled promise in ${delay}ms`);
-            }
-            else {
-                reject(`Rejected promise on ${delay}ms`);
-            }
-        }, delay);
-    });
-    return newPromise;
+ function createPromise(isFulfilled, delay) {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      if (isFulfilled) {
+          resolve(delay);
+      } else {
+        reject(delay);
+      }
+    }, delay);
+  });
 }

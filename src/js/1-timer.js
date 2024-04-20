@@ -41,7 +41,8 @@ flatpickr('#datetime-picker', options);
 
 function onClick(event) {
     if (userSelectedDate && currentTime === "") {
-        button.disabled = true;
+      button.disabled = true;
+      input.disabled = true;
         const timerInterval = setInterval(() => {
             currentTime = userSelectedDate.getTime() - Date.now();
             let result = convertMs(currentTime);
